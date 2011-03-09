@@ -1,0 +1,17 @@
+world:
+    categories:
+        faction:
+            limit: 1
+            time: 168
+        job:
+            limit: 1
+            time: 24
+        subjob:
+            limit: 2
+            time: 12
+        skill:
+            limit: 4
+            time: 1
+    setting:
+        defaultgroup: Peasant
+        maincategory: faction

@@ -1,0 +1,29 @@
+name: Roles
+version: 1.0
+main: org.anjocaido.roles.Roles
+website: http://www.anjocaido.info/
+description: Provides a interface for Users to move in between groups.
+authors:
+  - AnjoCaido
+  - Gabriel Couto
+commands:
+  joinrole:
+    description: Join a role of your choice.
+    usage: /<command> [category] [group]
+    permission: roles.joinrole
+  leaverole:
+    description: Leave a role of your choice.
+    usage: /<command> [category] [group]
+    permission: roles.leaverole
+  myroles:
+    description: List roles you have.
+    usage: /<command> [category]
+    permission: roles.myroles
+  whoroles:
+    description: List somebody else roles.
+    usage: /<command> <player> [category]
+    permission: roles.whoroles
+  roles:
+    description: Reload Roles configuration
+    usage: /<command>
+    permission: roles.roles

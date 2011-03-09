@@ -1,0 +1,259 @@
+[B]Roles[/B] - The user-driven group selection plugin.
+[B]Version:[/B] v1.0
+
+[b]You need at least GroupManager 1.0 alpha-5 to use this![/b]
+
+[B]Features:[/B]
+• Easy role categorization
+• Good integration with GroupManager
+• Let your users choose their roles in server, such as:factions, jobs, skills and etc. No need to do it for them.
+• Time based "leave", so your users can't join-leave groups all the time. They need to wait the amount of hours you choose to leave a role.
+• Multiworld support!
+
+[B]Commands[/B]:
+[CODE]commands:
+  joinrole:
+    description: Join a role of your choice.
+    usage: /<command> [category] [group]
+    permission: roles.joinrole
+  leaverole:
+    description: Leave a role of your choice.
+    usage: /<command> [category] [group]
+    permission: roles.leaverole
+  myroles:
+    description: List roles you have.
+    usage: /<command> [category]
+    permission: roles.myroles
+  whoroles:
+    description: List somebody else roles.
+    usage: /<command> <player> [category]
+    permission: roles.whoroles
+  roles:
+    description: Reload Roles configuration
+    usage: /<command>
+    permission: roles.roles[/CODE]
+This system is quite simple, yet functional. Hope it fits most people needs.
+All commands can be done only by players.
+
+All groups are added as a user subGroup, except when the user join a role of the main category. [b]Those roles really change the user group when joined.[/b]
+
+[B]Config file:[/B]
+[CODE]world:
+    categories:
+        faction:
+            limit: 1
+            time: 168
+        job:
+            limit: 1
+            time: 24
+        subjob:
+            limit: 2
+            time: 12
+        skill:
+            limit: 4
+            time: 1
+    setting:
+        defaultgroup: Peasant
+        maincategory: faction
+[/CODE]
+• [b]world[/b] is the world name. This plugin respects GM mirroring, so the name of the world must be the the same of the real world which you have data on GroupManager.
+• [b]faction,job,subjob,skill[/b] are the categories that you use on group specification. You can create as many as you want like that.(use always lower case, please)
+• [b]limit[/b] is the quantity of roles of that category each user can join in. [i]subjob[/i] is 2, so everyuser can join in two [i]subjobs[/i] role.
+• [b]time[/b] is the amount of time, in hours, a player need to wait before leaving a group that he joined of such category. The usual is the bigger the role, the bigger the time. No need to explain that.
+• [b] maincategory[/b] You can optionally set a category for users to choose their main groups. When a group change a role of main category, he will have his prefix, suffix, build and other variables affected, just like he get physically changed groups(instead of subgrouping).
+• [b]defaultgroup[/b] will tell Roles to which group should take a user if he leaves a group of the main category. So if you leave your faction, you will be redirected to Peasant group. No need for this if you don't use main category.
+
+[B]Got it! So, where are the groups?[/B]
+In your GroupManager… for every group, there are special variables you put in them, where Roles will read and decide what to do.
+
+These nodes go inside the INFO node for every group you want to set as a Role.
+• [B]roles-category: faction[/B] - Type accepted: String - Explanation: this is setting a group for a role called faction 
+• [B]roles-requirement: Miner[/B] - Type accepted: List/String - Explanation: this telling you that for you to join this role, you must have joined a role(group) called Miner.
+Every entry of the list is considered a full requirement, so you just need to fulfill one of the requirements to be able to join.
+Example:
+[CODE]roles-requirement:
+  - BlueFaction
+  - RedFaction[/CODE]
+To enforce multiple roles as requirement, you put role names in same entry separated by the character '&', just like this:
+[CODE]roles-requirement: Fighter&SuperCart[/CODE]
+
+Example of groups.yml file on GroupManager, using Roles:
+[CODE]groups:
+  Default:
+    default: true
+    permissions:
+    - essentials.help
+    - essentials.home
+    - essentials.motd
+    - essentials.sethome
+    - essentials.spawn
+    inheritance: []
+    info:
+      prefix: ''
+      build: false
+      suffix: ''
+  SemiAdmin:
+    default: false
+    permissions:
+    - +groupmanager.mandemote
+    - +groupmanager.manpromote
+    - -groupmanager.*
+    - '*'
+    inheritance:
+    - moderator
+    info:
+      prefix: '&c'
+      build: true
+      suffix: SemiAdmin
+  RedFaction:
+    default: false
+    permissions: []
+    inheritance:
+    - peasant
+    info:
+      prefix: '&c'
+      roles-category: faction
+      build: true
+      suffix: Red
+  Farmer:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.farmer
+    - essentials.spawnmob
+    inheritance: []
+    info:
+      roles-requirement:
+      - BlueFaction
+      - RedFaction
+      prefix: ''
+      roles-category: job
+      build: false
+      suffix: ''
+  Healer:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.healer
+    - essentials.heal
+    inheritance: []
+    info:
+      roles-requirement:
+      - BlueFaction
+      - RedFaction
+      prefix: ''
+      roles-category: job
+      build: false
+      suffix: ''
+  Fighter:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.fighter
+    inheritance: []
+    info:
+      prefix: ''
+      roles-category: skill
+      build: false
+      suffix: ''
+  Admin:
+    default: false
+    permissions:
+    - '*'
+    inheritance:
+    - semiadmin
+    info:
+      prefix: ''
+      build: true
+      suffix: ''
+  Miner:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.miner
+    - flashlight.regular
+    inheritance: []
+    info:
+      roles-requirement:
+      - BlueFaction
+      - RedFaction
+      prefix: ''
+      roles-category: job
+      build: false
+      suffix: ''
+  FlyingMan:
+    default: false
+    permissions:
+    - nocheat.moving
+    inheritance: []
+    info:
+      roles-requirement: Fighter&SuperCart
+      prefix: ''
+      roles-category: skill
+      build: false
+      suffix: ''
+  Peasant:
+    default: false
+    permissions:
+    - roles.joinrole
+    - roles.leaverole
+    - roles.myroles
+    inheritance:
+    - default
+    info:
+      prefix: '&e'
+      build: true
+      suffix: Peasant
+  BlueFaction:
+    default: false
+    permissions: []
+    inheritance:
+    - peasant
+    info:
+      prefix: '&d'
+      roles-category: faction
+      build: true
+      suffix: Blue
+  Railer:
+    default: false
+    permissions:
+    - essentials.kit
+    - essentials.kit.railer
+    inheritance: []
+    info:
+      roles-requirement: Miner
+      prefix: ''
+      roles-category: subjob
+      build: false
+      suffix: ''
+  SuperCart:
+    default: false
+    permissions:
+    - minecartmania.*
+    inheritance: []
+    info:
+      roles-requirement: Railer
+      prefix: ''
+      roles-category: skill
+      build: false
+      suffix: ''
+  Moderator:
+    default: false
+    permissions:
+    - essentials.tp
+    - essentials.tphere
+    - essentials.item
+    - essentials.give
+    inheritance:
+    - default
+    info:
+      prefix: '&c'
+      build: true
+      suffix: Mod[/CODE]
+
+[B]Latest Build Download:[/B]
+http://www.mdn.fm/files/276498_8edxe/Roles-1.0.zip
+
+===========================================
+Source:
+https://github.com/gmcouto/Roles
