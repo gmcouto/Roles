@@ -1,5 +1,5 @@
 [B]Roles[/B] - The user-driven group selection plugin.
-[B]Version:[/B] v1.0
+[B]Version:[/B] v1.1
 
 [b]You need at least [URL='http://forums.bukkit.org/threads/4723/']GroupManager[/URL] 1.0 alpha-5 to use this![/b]
 
@@ -253,6 +253,10 @@ Example of groups.yml file on GroupManager, using Roles:
 
 [B]Latest Build Download:[/B]
 http://www.mdn.fm/files/276498_8edxe/Roles-1.0.zip
+
+Changelog:
+Version 1.1
+¥ Fixed a bug ClassNotFound exception with newer CB builds.
 
 ===========================================
 Source:
