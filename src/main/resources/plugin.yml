@@ -1,5 +1,5 @@
 name: Roles
-version: 1.0
+version: 1.1
 main: org.anjocaido.roles.Roles
 website: http://www.anjocaido.info/
 description: Provides a interface for Users to move in between groups.

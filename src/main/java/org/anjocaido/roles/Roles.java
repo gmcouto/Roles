@@ -12,11 +12,10 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.anjocaido.groupmanager.GroupManager;
-import org.anjocaido.groupmanager.data.Group;
-import org.anjocaido.groupmanager.data.User;
-import org.anjocaido.groupmanager.dataholder.WorldDataHolder;
-import org.anjocaido.groupmanager.utils.Tasks;
+import org.anjocaido.groupmanager.*;
+import org.anjocaido.groupmanager.data.*;
+import org.anjocaido.groupmanager.dataholder.*;
+import org.anjocaido.groupmanager.utils.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -53,17 +52,26 @@ public class Roles extends JavaPlugin {
     @Override
     public void onEnable() {
         Plugin p = this.getServer().getPluginManager().getPlugin("GroupManager");
-        if (p != null) {
+        if (p != null) {           
             if (!this.getServer().getPluginManager().isPluginEnabled(p)) {
                 this.getServer().getPluginManager().enablePlugin(p);
             }
+            try {
+                p.getClass().getClassLoader().loadClass("org.anjocaido.groupmanager.utils.Tasks");
+                p.getClass().getClassLoader().loadClass("org.anjocaido.groupmanager.data.Group");
+                p.getClass().getClassLoader().loadClass("org.anjocaido.groupmanager.data.User");
+                p.getClass().getClassLoader().loadClass("org.anjocaido.groupmanager.dataholder.WorldDataHolder");
+                p.getClass().getClassLoader().loadClass("org.anjocaido.groupmanager.GroupManager");
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Roles.class.getName()).log(Level.SEVERE, null, ex);
+            }
             gm = (GroupManager) p;
+        } else {
+            System.out.println("Roles plugin could not load the GroupManager data!");
+            this.getPluginLoader().disablePlugin(this);
+            return;
         }
-        try {
-            Class tasks = gm.getClass().getClassLoader().loadClass("org.anjocaido.groupmanager.utils.Tasks");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Roles.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
         configFile = new File(getDataFolder(), "config.yml");
         historyFile = new File(getDataFolder(), "history.yml");
         firstTimeCheck();
@@ -289,7 +297,7 @@ public class Roles extends JavaPlugin {
     }
 
     public List<String> getCategoryList(String world) {
-        return config.getKeys(world+".categories");
+        return config.getKeys(world + ".categories");
     }
 
     public String getMainCategory(String world) {
@@ -356,7 +364,7 @@ public class Roles extends JavaPlugin {
         for (String gName : allGroups) {
             Group g = data.getGroup(gName);
             String thisCategory = getGroupCategory(g);
-            if (thisCategory!=null && thisCategory.equalsIgnoreCase(category)) {
+            if (thisCategory != null && thisCategory.equalsIgnoreCase(category)) {
                 count++;
             }
         }
@@ -459,7 +467,7 @@ public class Roles extends JavaPlugin {
         for (String gName : allGroups) {
             Group g = data.getGroup(gName);
             String thisCategory = getGroupCategory(g);
-            if (thisCategory!=null && !categories.contains(thisCategory)) {
+            if (thisCategory != null && !categories.contains(thisCategory)) {
                 categories.add(thisCategory);
             }
         }
@@ -473,7 +481,7 @@ public class Roles extends JavaPlugin {
         for (String gName : allGroups) {
             Group g = data.getGroup(gName);
             String thisCategory = getGroupCategory(g);
-            if (thisCategory!=null && thisCategory.equalsIgnoreCase(category)) {
+            if (thisCategory != null && thisCategory.equalsIgnoreCase(category)) {
                 roles.add(gName);
             }
         }

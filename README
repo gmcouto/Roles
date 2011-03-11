@@ -1,7 +1,7 @@
 [B]Roles[/B] - The user-driven group selection plugin.
 [B]Version:[/B] v1.0
 
-[b]You need at least GroupManager 1.0 alpha-5 to use this![/b]
+[b]You need at least [URL='http://forums.bukkit.org/threads/4723/']GroupManager[/URL] 1.0 alpha-5 to use this![/b]
 
 [B]Features:[/B]
 • Easy role categorization
@@ -67,7 +67,7 @@ All groups are added as a user subGroup, except when the user join a role of the
 In your GroupManager… for every group, there are special variables you put in them, where Roles will read and decide what to do.
 
 These nodes go inside the INFO node for every group you want to set as a Role.
-• [B]roles-category: faction[/B] - Type accepted: String - Explanation: this is setting a group for a role called faction 
+• [B]roles-category: faction[/B] - Type accepted: String - Explanation: this is setting a group for a role called faction
 • [B]roles-requirement: Miner[/B] - Type accepted: List/String - Explanation: this telling you that for you to join this role, you must have joined a role(group) called Miner.
 Every entry of the list is considered a full requirement, so you just need to fulfill one of the requirements to be able to join.
 Example:
